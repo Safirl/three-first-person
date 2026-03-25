@@ -5,6 +5,7 @@
 import { Camera, Experience, Time } from "base-experience";
 import * as THREE from "three"
 import { PointerLockControls } from "three/examples/jsm/Addons.js";
+import GUI from "lil-gui";
 
 export default class FirstPersonCamera extends Camera {
     declare controls: PointerLockControls
@@ -53,7 +54,7 @@ export default class FirstPersonCamera extends Camera {
 
     setControls() {
         this.controls = new PointerLockControls(this.instance, document.body)
-        document.body.addEventListener('click', () => {
+        Experience.instance?.canvas.addEventListener('click', () => {
             this.controls.lock()
         })
         document.addEventListener( 'keydown', this.onKeyDown );
@@ -61,7 +62,6 @@ export default class FirstPersonCamera extends Camera {
     }
 
     resize(): void {
-        // this.controls.handleResize();
         super.resize()
     }
 
@@ -164,5 +164,28 @@ export default class FirstPersonCamera extends Camera {
         }
 
         this.velocity.y -= 9.8 * this.mass * Experience.instance.time.delta;
+    }
+
+    setDebugObject(): void {
+        if (!this.debug.active) {
+            return;
+        }
+        super.setDebugObject();
+
+        const movementsFolder = this.debugFolder.addFolder("movements")
+
+        movementsFolder
+            .add(this, 'speed')
+            .name('speed')
+            .min(1)
+            .max(100)
+            .step(.1)
+        movementsFolder
+            .add(this, 'friction')
+            .name('friction')
+            .min(1)
+            .max(800)
+            .step(.1)
+
     }
 }
