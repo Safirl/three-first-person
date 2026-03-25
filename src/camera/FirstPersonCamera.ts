@@ -32,8 +32,8 @@ export default class FirstPersonCamera extends Camera {
 
         this.velocity = new THREE.Vector3()
         this.direction = new THREE.Vector3()
-        this.speed = .005
-        this.friction = .03
+        this.speed = 30
+        this.friction = 200
     }
 
     init(): void {
@@ -130,7 +130,7 @@ export default class FirstPersonCamera extends Camera {
         if (this.controls.isLocked === false) {
             return;
         }
-        const damping = Math.exp(-this.friction * Experience.instance.time.delta);
+        const damping = Math.exp(-this.friction * Experience.instance.time.delta / 10000);
 
         this.velocity.x *= damping;
         this.velocity.z *= damping;
@@ -145,9 +145,9 @@ export default class FirstPersonCamera extends Camera {
         this.direction.normalize();
 
         if (this.moveForward || this.moveBackward) {
-            this.velocity.z -= this.direction.z * this.speed * Experience.instance.time.delta;
+            this.velocity.z -= this.direction.z * this.speed * Experience.instance.time.delta / 10000;
         }
-        if (this.moveLeft || this.moveRight) this.velocity.x -= this.direction.x * this.speed * Experience.instance.time.delta;
+        if (this.moveLeft || this.moveRight) this.velocity.x -= this.direction.x * this.speed * Experience.instance.time.delta / 10000;
 
         //Implement here collisions
 
