@@ -1,22 +1,36 @@
 {
-  "name": "first-person-template",
-  "private": true,
-  "version": "0.0.0",
+  "name": "first-person-plugin",
+  "version": "0.1.0",
+  "main": "dist/first-person-plugin.js",
+  "module": "dist/first-person-plugin.js",
   "type": "module",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/base-experience.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview"
+    "build": "vite build",
+    "preview": "vite preview",
+    "prepare": "vite build"
   },
   "devDependencies": {
     "@types/three": "^0.183.1",
+    "base-experience": "github:Safirl/three-base-experience",
     "typescript": "~5.9.3",
-    "vite": "^7.3.1"
-  },
-  "dependencies": {
-    "base-experience": "github:safirl/three-base-experience",
-    "lil-gui": "^0.21.0",
-    "three": "^0.183.1",
+    "vite": "^7.3.1",
+    "vite-plugin-dts": "^4.5.4",
     "vite-plugin-restart": "^2.0.0"
+  },
+  "peerDependencies": {
+    "base-experience": "github:Safirl/three-base-experience",
+    "lil-gui": "^0.21.0",
+    "three": "^0.183.0"
   }
 }

@@ -33,7 +33,7 @@ export default class FirstPersonCamera extends Camera {
 
         this.velocity = new THREE.Vector3()
         this.direction = new THREE.Vector3()
-        this.speed = 30
+        this.speed = 3
         this.friction = 200
     }
 
@@ -134,9 +134,6 @@ export default class FirstPersonCamera extends Camera {
 
         this.velocity.x *= damping;
         this.velocity.z *= damping;
-
-        // this.velocity.x -= this.velocity.x * this.friction * Experience.instance.time.delta;
-        // this.velocity.z -= this.velocity.z * this.friction * Experience.instance.time.delta;
 
         this.applyGravity();
 

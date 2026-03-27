@@ -1,21 +1,29 @@
+import { resolve } from 'path'
 import restart from 'vite-plugin-restart'
+import dts from 'vite-plugin-dts'
 
 export default {
-    // root: 'src/', // Sources files (typically where index.html is)
-    // publicDir: '../public/', // Path from "root" to static assets (files that are served as they are)
     server:
     {
-        host: true, // Open to local network and display URL
-        open: !('SANDBOX_URL' in process.env || 'CODESANDBOX_HOST' in process.env) // Open if it's not a CodeSandbox
+        host: true,
+        open: !('SANDBOX_URL' in process.env || 'CODESANDBOX_HOST' in process.env)
     },
     build:
     {
-        outDir: '../dist', // Output in the dist/ folder
-        emptyOutDir: true, // Empty the folder first
-        sourcemap: true // Add sourcemap
+        lib: {
+            entry: resolve(__dirname, 'src/index.ts'),
+            name: 'FirstPersonPlugin',
+            fileName: 'first-person-plugin',
+            formats: ['es'],
+        },
+        rollupOptions: {
+            external: ['three', 'three/examples/jsm/Addons.js', 'lil-gui', 'base-experience'],
+        },
+        sourcemap: true,
     },
     plugins:
     [
-        restart({ restart: [ '../public/**', ] }) // Restart server on static file change
+        restart({ restart: [ '../public/**', ] }),
+        dts({ rollupTypes: true }),
     ],
 }
