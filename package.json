@@ -7,7 +7,7 @@
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/base-experience.js",
+      "import": "./dist/first-person-plugin.js",
       "types": "./dist/index.d.ts"
     }
   },
