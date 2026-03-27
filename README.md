@@ -13,7 +13,7 @@ A [base-experience](https://github.com/Safirl/three-base-experience) plugin that
 ## Installation
 
 ```bash
-npm i github:Safirl/first-person-plugin
+npm i github:Safirl/three-first-person
 ```
 
 Peer dependencies required in your project:
