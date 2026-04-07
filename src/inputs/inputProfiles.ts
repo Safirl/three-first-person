@@ -24,58 +24,58 @@ export const BitControllerProfile: InputProfile = {
             event: "inventory"
         }
     ],
-    axes: [
-        {
-            physicalInput: "leftStickX+",
-            index: 0,
-            event: "right"
-        },
-        {
-            physicalInput: "leftStickX-",
-            index: 0,
-            event: "left"
-        },
-        {
-            physicalInput: "leftStickY+",
-            index: 1,
-            event: "forward"
-        },
-        {
-            physicalInput: "leftStickY-",
-            index: 1,
-            event: "backward"
-        },
-        {
-            physicalInput: "rightStickX+",
-            index: -1,
-            event: "lookRight"
-        },
-        {
-            physicalInput: "rightStickX-",
-            index: -1,
-            event: "lookLeft"
-        },
-        {
-            physicalInput: "rightStickY+",
-            index: -1,
-            event: "lookUp"
-        },
-        {
-            physicalInput: "rightStickY-",
-            index: -1,
-            event: "lookDown"
-        },
-        {
-            physicalInput: "rightStickY+",
-            index: -1,
-            event: "lookUp"
-        },
-        {
-            physicalInput: "rightStickY-",
-            index: -1,
-            event: "lookDown"
-        }
-    ]
+    // axes: [
+    //     {
+    //         physicalInput: "leftStickX+",
+    //         index: 0,
+    //         event: "right"
+    //     },
+    //     {
+    //         physicalInput: "leftStickX-",
+    //         index: 0,
+    //         event: "left"
+    //     },
+    //     {
+    //         physicalInput: "leftStickY+",
+    //         index: 1,
+    //         event: "forward"
+    //     },
+    //     {
+    //         physicalInput: "leftStickY-",
+    //         index: 1,
+    //         event: "backward"
+    //     },
+    //     {
+    //         physicalInput: "rightStickX+",
+    //         index: -1,
+    //         event: "lookRight"
+    //     },
+    //     {
+    //         physicalInput: "rightStickX-",
+    //         index: -1,
+    //         event: "lookLeft"
+    //     },
+    //     {
+    //         physicalInput: "rightStickY+",
+    //         index: -1,
+    //         event: "lookUp"
+    //     },
+    //     {
+    //         physicalInput: "rightStickY-",
+    //         index: -1,
+    //         event: "lookDown"
+    //     },
+    //     {
+    //         physicalInput: "rightStickY+",
+    //         index: -1,
+    //         event: "lookUp"
+    //     },
+    //     {
+    //         physicalInput: "rightStickY-",
+    //         index: -1,
+    //         event: "lookDown"
+    //     }
+    // ]
 }
 
 export const keyboardProfile = {
