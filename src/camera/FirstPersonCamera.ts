@@ -3,216 +3,204 @@
  */
 
 import { Camera, Experience, Time, type InputEventArgs } from "base-experience";
-import * as THREE from "three"
-import { PointerLockControls } from "three/examples/jsm/Addons.js";
+import * as THREE from "three";
+import { PointerLockControls, type GLTF } from "three/examples/jsm/Addons.js";
 import GUI from "lil-gui";
 
 export default class FirstPersonCamera extends Camera {
-    declare controls: PointerLockControls
+  declare controls: PointerLockControls;
 
-    //Movements
-    declare moveForward: boolean;
-    declare moveBackward: boolean;
-    declare moveLeft: boolean;
-    declare moveRight: boolean;
-    declare canJump: boolean;
+  //Movements
+  declare moveForward: boolean;
+  declare moveBackward: boolean;
+  declare moveLeft: boolean;
+  declare moveRight: boolean;
+  declare canJump: boolean;
 
-    declare velocity: THREE.Vector3;
-    declare direction: THREE.Vector3;
-    declare speed: number;
-    declare friction: number
-    declare mass: number;
+  declare raycaster: THREE.Raycaster;
 
-    constructor() {
-        super()
-        this.moveBackward = false;
+  declare velocity: THREE.Vector3;
+  declare direction: THREE.Vector3;
+  declare speed: number;
+  declare friction: number;
+  declare mass: number;
+  declare height: number;
+
+  constructor() {
+    super();
+    this.moveBackward = false;
+    this.moveForward = false;
+    this.moveLeft = false;
+    this.moveRight = false;
+    this.canJump = false;
+
+    this.raycaster = new THREE.Raycaster(
+      new THREE.Vector3(),
+      new THREE.Vector3(0, -1, 0),
+      0,
+      10,
+    );
+
+    this.velocity = new THREE.Vector3();
+    this.direction = new THREE.Vector3();
+    this.speed = 3;
+    this.friction = 200;
+    this.height = 5;
+    this.mass = 1;
+  }
+
+  init(): void {
+    super.init();
+  }
+
+  setInstance(): void {
+    this.instance = new THREE.PerspectiveCamera(
+      35,
+      this.sizes.width / this.sizes.height,
+      0.1,
+      1000,
+    );
+    this.instance.position.set(0, 1, 10);
+    super.setInstance();
+  }
+
+  setControls() {
+    this.controls = new PointerLockControls(this.instance, document.body);
+    Experience.instance?.canvas.addEventListener("click", () => {
+      this.controls.lock();
+    });
+    this.bindInputs();
+  }
+
+  bindInputs() {
+    Experience.instance?.inputSystem.on("forward", (args: InputEventArgs) => {
+      if (args.type === "pressed") {
+        this.moveForward = true;
+      } else if (args.type === "released") {
         this.moveForward = false;
+      }
+    });
+    Experience.instance?.inputSystem.on("backward", (args: InputEventArgs) => {
+      if (args.type === "pressed") {
+        this.moveBackward = true;
+      } else if (args.type === "released") {
+        this.moveBackward = false;
+      }
+    });
+    Experience.instance?.inputSystem.on("left", (args: InputEventArgs) => {
+      if (args.type === "pressed") {
+        this.moveLeft = true;
+      } else if (args.type === "released") {
         this.moveLeft = false;
+      }
+    });
+    Experience.instance?.inputSystem.on("right", (args: InputEventArgs) => {
+      if (args.type === "pressed") {
+        this.moveRight = true;
+      } else if (args.type === "released") {
         this.moveRight = false;
+      }
+    });
+    Experience.instance?.inputSystem.on("jump", (args: InputEventArgs) => {
+      if (args.type === "pressed" && this.canJump) {
+        this.velocity.y += 350;
         this.canJump = false;
+      }
+    });
+  }
 
-        this.velocity = new THREE.Vector3()
-        this.direction = new THREE.Vector3()
-        this.speed = 3
-        this.friction = 200
+  resize(): void {
+    super.resize();
+  }
+
+  destroy(): void {
+    this.controls.dispose();
+  }
+
+  update(): void {
+    if (!Experience.instance) {
+      return;
     }
 
-    init(): void {
-        super.init()
-    }
-    
-    setInstance(): void {
-        this.instance = new THREE.PerspectiveCamera(
-            35,
-            this.sizes.width / this.sizes.height,
-            0.1,
-            1000,
-        );
-        this.instance.position.set(0, 1, 10);
-        super.setInstance()
+    if (this.controls.isLocked === false) {
+      return;
     }
 
-    setControls() {
-        this.controls = new PointerLockControls(this.instance, document.body)
-        Experience.instance?.canvas.addEventListener('click', () => {
-            this.controls.lock()
-        })
-        this.bindInputs();
+    const damping = Math.exp(
+      (-this.friction * Experience.instance.time.delta) / 10000,
+    );
+
+    this.velocity.x *= damping;
+    this.velocity.z *= damping;
+
+    this.direction.z = Number(this.moveForward) - Number(this.moveBackward);
+    this.direction.x = Number(this.moveRight) - Number(this.moveLeft);
+    this.direction.normalize();
+
+    this.applyGravity();
+
+    if (this.moveForward || this.moveBackward) {
+      this.velocity.z -=
+        (this.direction.z * this.speed * Experience.instance.time.delta) /
+        10000;
+    }
+    if (this.moveLeft || this.moveRight)
+      this.velocity.x -=
+        (this.direction.x * this.speed * Experience.instance.time.delta) /
+        10000;
+
+    //    Collision detection
+    this.raycaster.ray.origin.copy(this.controls.object.position);
+    this.raycaster.ray.direction = new THREE.Vector3(0, -1, 0);
+    this.raycaster.far = this.height;
+
+    const intersections = this.raycaster.intersectObjects(
+      this.experience.world.scene.children,
+      true,
+    );
+
+    const onObject = intersections.length > 0;
+    if (onObject) {
+      this.velocity.y = Math.max(0, this.velocity.y);
+      this.canJump = true;
+      console.log("onObject: ", onObject, " canJump: ", this.canJump);
     }
 
-    bindInputs() {
-        Experience.instance?.inputSystem.on("forward", (args: InputEventArgs) => {
-            if (args.type === "pressed") {
-                this.moveForward = true;
-            } else if (args.type === "released") {
-                this.moveForward = false;
-            }
-        })
-        Experience.instance?.inputSystem.on("backward", (args: InputEventArgs) => {
-            if (args.type === "pressed") {
-                this.moveBackward = true;
-            } else if (args.type === "released") {
-                this.moveBackward = false;
-            }
-        })
-        Experience.instance?.inputSystem.on("left", (args: InputEventArgs) => {
-            if (args.type === "pressed") {
-                this.moveLeft = true;
-            } else if (args.type === "released") {
-                this.moveLeft = false;
-            }
-        })
-        Experience.instance?.inputSystem.on("right", (args: InputEventArgs) => {
-            if (args.type === "pressed") {
-                this.moveRight = true;
-            } else if (args.type === "released") {
-                this.moveRight = false;
-            }
-        })
+    this.controls.moveRight(-this.velocity.x * Experience.instance.time.delta);
+    this.controls.moveForward(
+      -this.velocity.z * Experience.instance.time.delta,
+    );
+    this.controls.object.position.y +=
+      (this.velocity.y * Experience.instance.time.delta) / 10000;
+    console.log("velocity", this.velocity);
+  }
+
+  /**
+   * Called when calculating movements from inputs. Override to add a custom gravity or change the mass variable.
+   */
+  applyGravity(): void {
+    if (!Experience.instance) {
+      return;
     }
+    this.velocity.y -=
+      (9.8 * this.mass * Experience.instance.time.delta) / 10000;
+  }
 
-    resize(): void {
-        super.resize()
+  setDebugObject(): void {
+    if (!this.debug.active) {
+      return;
     }
+    super.setDebugObject();
 
-    destroy(): void {
-        this.controls.dispose()
-    }
+    const movementsFolder = this.debugFolder.addFolder("movements");
 
-    // onKeyDown = (event: KeyboardEvent): void => {
-    //     switch ( event.code ) {
-    //         case 'ArrowUp':
-    //         case 'KeyW':
-    //             this.moveForward = true;
-    //             break;
-
-    //         case 'ArrowLeft':
-    //         case 'KeyA':
-    //             this.moveLeft = true;
-    //             break;
-
-    //         case 'ArrowDown':
-    //         case 'KeyS':
-    //             this.moveBackward = true;
-    //             break;
-
-    //         case 'ArrowRight':
-    //         case 'KeyD':
-    //             this.moveRight = true;
-    //             break;
-
-    //         case 'Space':
-    //             if ( this.canJump === true ) this.velocity.y += 350;
-    //             this.canJump = false;
-    //             break;
-    //     }
-    // }
-
-    // onKeyUp = (event: KeyboardEvent): void => {
-    //     switch ( event.code ) {
-    //         case 'ArrowUp':
-    //         case 'KeyW':
-    //             this.moveForward = false;
-    //             break;
-
-    //         case 'ArrowLeft':
-    //         case 'KeyA':
-    //             this.moveLeft = false;
-    //             break;
-
-    //         case 'ArrowDown':
-    //         case 'KeyS':
-    //             this.moveBackward = false;
-    //             break;
-
-    //         case 'ArrowRight':
-    //         case 'KeyD':
-    //             this.moveRight = false;
-    //             break;
-    //     }
-    // }
-
-    update(): void {
-        if (!Experience.instance) {
-            return;
-        }
-        
-        if (this.controls.isLocked === false) {
-            return;
-        }
-        const damping = Math.exp(-this.friction * Experience.instance.time.delta / 10000);
-
-        this.velocity.x *= damping;
-        this.velocity.z *= damping;
-
-        this.applyGravity();
-
-        this.direction.z = Number(this.moveForward) - Number(this.moveBackward);
-        this.direction.x = Number(this.moveRight) - Number(this.moveLeft);
-        this.direction.normalize();
-
-        if (this.moveForward || this.moveBackward) {
-            this.velocity.z -= this.direction.z * this.speed * Experience.instance.time.delta / 10000;
-        }
-        if (this.moveLeft || this.moveRight) this.velocity.x -= this.direction.x * this.speed * Experience.instance.time.delta / 10000;
-
-        //Implement here collisions
-
-        this.controls.moveRight( - this.velocity.x * Experience.instance.time.delta );
-        this.controls.moveForward( - this.velocity.z * Experience.instance.time.delta );
-    }
-
-    /**
-     * Called when calculating movements from inputs. Override to add a custom gravity or change the mass variable.
-     */
-    applyGravity(): void {
-        if (!Experience.instance) {
-            return;
-        }
-
-        this.velocity.y -= 9.8 * this.mass * Experience.instance.time.delta;
-    }
-
-    setDebugObject(): void {
-        if (!this.debug.active) {
-            return;
-        }
-        super.setDebugObject();
-
-        const movementsFolder = this.debugFolder.addFolder("movements")
-
-        movementsFolder
-            .add(this, 'speed')
-            .name('speed')
-            .min(1)
-            .max(100)
-            .step(.1)
-        movementsFolder
-            .add(this, 'friction')
-            .name('friction')
-            .min(1)
-            .max(800)
-            .step(.1)
-
-    }
+    movementsFolder.add(this, "speed").name("speed").min(1).max(100).step(0.1);
+    movementsFolder
+      .add(this, "friction")
+      .name("friction")
+      .min(1)
+      .max(800)
+      .step(0.1);
+    movementsFolder.add(this, "height").name("height").min(1).max(3).step(0.1);
+  }
 }
