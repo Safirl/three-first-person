@@ -2,7 +2,7 @@
  * Implementation of https://github.com/mrdoob/three.js/blob/master/examples/misc_controls_pointerlock.html
  */
 
-import { Camera, Experience, Time } from "base-experience";
+import { Camera, Experience, Time, type InputEventArgs } from "base-experience";
 import * as THREE from "three"
 import { PointerLockControls } from "three/examples/jsm/Addons.js";
 import GUI from "lil-gui";
@@ -57,8 +57,38 @@ export default class FirstPersonCamera extends Camera {
         Experience.instance?.canvas.addEventListener('click', () => {
             this.controls.lock()
         })
-        document.addEventListener( 'keydown', this.onKeyDown );
-        document.addEventListener( 'keyup', this.onKeyUp );
+        this.bindInputs();
+    }
+
+    bindInputs() {
+        Experience.instance?.inputSystem.on("forward", (args: InputEventArgs) => {
+            if (args.type === "pressed") {
+                this.moveForward = true;
+            } else if (args.type === "released") {
+                this.moveForward = false;
+            }
+        })
+        Experience.instance?.inputSystem.on("backward", (args: InputEventArgs) => {
+            if (args.type === "pressed") {
+                this.moveBackward = true;
+            } else if (args.type === "released") {
+                this.moveBackward = false;
+            }
+        })
+        Experience.instance?.inputSystem.on("left", (args: InputEventArgs) => {
+            if (args.type === "pressed") {
+                this.moveLeft = true;
+            } else if (args.type === "released") {
+                this.moveLeft = false;
+            }
+        })
+        Experience.instance?.inputSystem.on("right", (args: InputEventArgs) => {
+            if (args.type === "pressed") {
+                this.moveRight = true;
+            } else if (args.type === "released") {
+                this.moveRight = false;
+            }
+        })
     }
 
     resize(): void {
@@ -69,58 +99,58 @@ export default class FirstPersonCamera extends Camera {
         this.controls.dispose()
     }
 
-    onKeyDown = (event: KeyboardEvent): void => {
-        switch ( event.code ) {
-            case 'ArrowUp':
-            case 'KeyW':
-                this.moveForward = true;
-                break;
+    // onKeyDown = (event: KeyboardEvent): void => {
+    //     switch ( event.code ) {
+    //         case 'ArrowUp':
+    //         case 'KeyW':
+    //             this.moveForward = true;
+    //             break;
 
-            case 'ArrowLeft':
-            case 'KeyA':
-                this.moveLeft = true;
-                break;
+    //         case 'ArrowLeft':
+    //         case 'KeyA':
+    //             this.moveLeft = true;
+    //             break;
 
-            case 'ArrowDown':
-            case 'KeyS':
-                this.moveBackward = true;
-                break;
+    //         case 'ArrowDown':
+    //         case 'KeyS':
+    //             this.moveBackward = true;
+    //             break;
 
-            case 'ArrowRight':
-            case 'KeyD':
-                this.moveRight = true;
-                break;
+    //         case 'ArrowRight':
+    //         case 'KeyD':
+    //             this.moveRight = true;
+    //             break;
 
-            case 'Space':
-                if ( this.canJump === true ) this.velocity.y += 350;
-                this.canJump = false;
-                break;
-        }
-    }
+    //         case 'Space':
+    //             if ( this.canJump === true ) this.velocity.y += 350;
+    //             this.canJump = false;
+    //             break;
+    //     }
+    // }
 
-    onKeyUp = (event: KeyboardEvent): void => {
-        switch ( event.code ) {
-            case 'ArrowUp':
-            case 'KeyW':
-                this.moveForward = false;
-                break;
+    // onKeyUp = (event: KeyboardEvent): void => {
+    //     switch ( event.code ) {
+    //         case 'ArrowUp':
+    //         case 'KeyW':
+    //             this.moveForward = false;
+    //             break;
 
-            case 'ArrowLeft':
-            case 'KeyA':
-                this.moveLeft = false;
-                break;
+    //         case 'ArrowLeft':
+    //         case 'KeyA':
+    //             this.moveLeft = false;
+    //             break;
 
-            case 'ArrowDown':
-            case 'KeyS':
-                this.moveBackward = false;
-                break;
+    //         case 'ArrowDown':
+    //         case 'KeyS':
+    //             this.moveBackward = false;
+    //             break;
 
-            case 'ArrowRight':
-            case 'KeyD':
-                this.moveRight = false;
-                break;
-        }
-    }
+    //         case 'ArrowRight':
+    //         case 'KeyD':
+    //             this.moveRight = false;
+    //             break;
+    //     }
+    // }
 
     update(): void {
         if (!Experience.instance) {

@@ -27,23 +27,23 @@ export const BitControllerProfile: InputProfile = {
     axes: [
         {
             physicalInput: "leftStickX+",
-            index: -1,
-            event: "moveRight"
+            index: 0,
+            event: "right"
         },
         {
             physicalInput: "leftStickX-",
-            index: -1,
-            event: "moveLeft"
+            index: 0,
+            event: "left"
         },
         {
             physicalInput: "leftStickY+",
-            index: -1,
-            event: "moveForward"
+            index: 1,
+            event: "forward"
         },
         {
             physicalInput: "leftStickY-",
-            index: -1,
-            event: "moveBackward"
+            index: 1,
+            event: "backward"
         },
         {
             physicalInput: "rightStickX+",
@@ -54,6 +54,16 @@ export const BitControllerProfile: InputProfile = {
             physicalInput: "rightStickX-",
             index: -1,
             event: "lookLeft"
+        },
+        {
+            physicalInput: "rightStickY+",
+            index: -1,
+            event: "lookUp"
+        },
+        {
+            physicalInput: "rightStickY-",
+            index: -1,
+            event: "lookDown"
         },
         {
             physicalInput: "rightStickY+",
@@ -75,6 +85,44 @@ export const keyboardProfile = {
             physicalInput: "Spacebar",
             index: "Space",
             event: "jump"
-        }
+        },
+        {
+            physicalInput: "A",
+            index: "KeyA",
+            event: "left"
+        },
+        {
+            physicalInput: "D",
+            index: "KeyD",
+            event: "right"
+        },
+        {
+            physicalInput: "W",
+            index: "KeyW",
+            event: "forward"
+        },
+        {
+            physicalInput: "S",
+            index: "KeyS",
+            event: "backward"
+        },
+        {
+            physicalInput: "LeftArrow",
+            index: "ArrowLeft",
+            event: "left"
+        },
+        {
+            physicalInput: "RightArrow",
+            index: "ArrowRight",
+            event: "right"
+        },{
+            physicalInput: "UpArrow",
+            index: "ArrowUp",
+            event: "forward"
+        },{
+            physicalInput: "DownArrow",
+            index: "ArrowDown",
+            event: "backward"
+        },
     ],
 }

@@ -21,14 +21,14 @@ const init = () => {
   const profiles: InputProfile[] = [keyboardProfile, BitControllerProfile]
 
   experience.inputSystem.addInputProfiles(profiles)
-  experience.inputSystem.on("jump", (args: InputEventArgs) => {
-    const gamepad = args.controller as Gamepad
-    if (typeof args.controller === typeof Gamepad) {
-      console.log("controller: ", gamepad.id, " triggered: ", args.type)
-    } else {
-      console.log("controller: ", args.controller, " triggered: ", args.type)
-    }
-  })
+  // experience.inputSystem.on("left", (args: InputEventArgs) => {
+  //   const gamepad = args.controller as Gamepad
+  //   if (typeof args.controller === typeof Gamepad) {
+  //     console.log("controller: ", gamepad.id, " triggered: ", args.type)
+  //   } else {
+  //     console.log("controller: ", args.controller, " triggered: ", args.type)
+  //   }
+  // })
 }  
 
 init()
