@@ -21,8 +21,9 @@ export default class FirstPersonCameraOctree extends Camera {
   declare speed: number;
   declare mass: number;
   declare delta: number;
+  declare maxPitch: number;
 
-  constructor() {
+  constructor(height = 1.7, speed = 40, mass = 50, friction = 10) {
     super();
 
     // Mouvements
@@ -35,20 +36,23 @@ export default class FirstPersonCameraOctree extends Camera {
     // Collision
     this.worldOctree = new Octree();
     this.canJump = false;
-    this.height = 1.7;
-    this.playerCollider = new Capsule(
-      new THREE.Vector3(0, 0.35, 0),
-      new THREE.Vector3(0, this.height, 0),
-      0.35,
-    );
 
     this.velocity = new THREE.Vector3();
     this.direction = new THREE.Vector3();
 
     // Params
-    this.speed = 40;
-    this.mass = 50;
-    this.friction = 10;
+    this.height = height;
+    this.speed = speed;
+    this.mass = mass;
+    this.friction = friction;
+    this.maxPitch = Math.PI / 2 - 0.01;
+
+    this.playerCollider = new Capsule(
+      new THREE.Vector3(0, 0.35, 0),
+      new THREE.Vector3(0, this.height, 0),
+      0.35,
+    );
+    this.playerCollider.translate(new THREE.Vector3(0, 0, 5));
   }
 
   // Création de la camra
@@ -60,7 +64,6 @@ export default class FirstPersonCameraOctree extends Camera {
       1000,
     );
     this.instance.rotation.order = "YXZ";
-    this.instance.position.set(0, 1, 10);
     super.setInstance();
   }
 
@@ -73,6 +76,11 @@ export default class FirstPersonCameraOctree extends Camera {
       if (document.pointerLockElement === document.body) {
         this.instance.rotation.y -= e.movementX / 500;
         this.instance.rotation.x -= e.movementY / 500;
+        this.instance.rotation.x = THREE.MathUtils.clamp(
+          this.instance.rotation.x,
+          -this.maxPitch,
+          this.maxPitch,
+        );
       }
     });
 
@@ -236,6 +244,8 @@ export default class FirstPersonCameraOctree extends Camera {
       .min(1)
       .max(800)
       .step(0.1);
-    movementsFolder.add(this, "height").name("height").min(1).max(3).step(0.1);
+    movementsFolder.add(this, "height").name("height").min(1).max(5).step(0.1).onChange(() => {
+        this.playerCollider.end.set(0, this.height, 0);
+    });
   }
 }
