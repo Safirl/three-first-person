@@ -46,7 +46,7 @@ export default class FirstPersonCamera extends Camera {
             35,
             this.sizes.width / this.sizes.height,
             0.1,
-            100,
+            1000,
         );
         this.instance.position.set(0, 1, 10);
         super.setInstance()
