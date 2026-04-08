@@ -2,6 +2,7 @@ import { Environment, Experience, Floor, World } from "base-experience";
 import type FirstPersonCameraOctree from "../../camera/FirstPersonCameraOctree";
 import Wall from "../objects/Wall";
 
+
 export default class CollisionTemplateWorld extends World {
   declare experience: Experience;
   declare environment: Environment;
