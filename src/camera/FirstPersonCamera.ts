@@ -99,58 +99,6 @@ export default class FirstPersonCamera extends Camera {
         this.controls.dispose()
     }
 
-    // onKeyDown = (event: KeyboardEvent): void => {
-    //     switch ( event.code ) {
-    //         case 'ArrowUp':
-    //         case 'KeyW':
-    //             this.moveForward = true;
-    //             break;
-
-    //         case 'ArrowLeft':
-    //         case 'KeyA':
-    //             this.moveLeft = true;
-    //             break;
-
-    //         case 'ArrowDown':
-    //         case 'KeyS':
-    //             this.moveBackward = true;
-    //             break;
-
-    //         case 'ArrowRight':
-    //         case 'KeyD':
-    //             this.moveRight = true;
-    //             break;
-
-    //         case 'Space':
-    //             if ( this.canJump === true ) this.velocity.y += 350;
-    //             this.canJump = false;
-    //             break;
-    //     }
-    // }
-
-    // onKeyUp = (event: KeyboardEvent): void => {
-    //     switch ( event.code ) {
-    //         case 'ArrowUp':
-    //         case 'KeyW':
-    //             this.moveForward = false;
-    //             break;
-
-    //         case 'ArrowLeft':
-    //         case 'KeyA':
-    //             this.moveLeft = false;
-    //             break;
-
-    //         case 'ArrowDown':
-    //         case 'KeyS':
-    //             this.moveBackward = false;
-    //             break;
-
-    //         case 'ArrowRight':
-    //         case 'KeyD':
-    //             this.moveRight = false;
-    //             break;
-    //     }
-    // }
 
     update(): void {
         if (!Experience.instance) {
