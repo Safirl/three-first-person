@@ -32,8 +32,5 @@
     "base-experience": "github:Safirl/three-base-experience",
     "lil-gui": "^0.21.0",
     "three": "^0.183.0"
-  },
-  "dependencies": {
-    "@dimforge/rapier3d": "^0.19.3"
   }
 }

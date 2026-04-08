@@ -20,6 +20,7 @@ export default class FirstPersonCameraOctree extends Camera {
   declare height: number;
   declare speed: number;
   declare mass: number;
+  declare delta: number;
 
   constructor() {
     super();
@@ -79,39 +80,43 @@ export default class FirstPersonCameraOctree extends Camera {
   }
 
   bindInputs() {
-    Experience.instance?.inputSystem.on("forward", (args: InputEventArgs) => {
-      if (args.type === "pressed") {
-        this.moveForward = true;
-      } else if (args.type === "released") {
-        this.moveForward = false;
-      }
-    });
-    Experience.instance?.inputSystem.on("backward", (args: InputEventArgs) => {
-      if (args.type === "pressed") {
-        this.moveBackward = true;
-      } else if (args.type === "released") {
-        this.moveBackward = false;
-      }
-    });
-    Experience.instance?.inputSystem.on("left", (args: InputEventArgs) => {
-      if (args.type === "pressed") {
-        this.moveLeft = true;
-      } else if (args.type === "released") {
-        this.moveLeft = false;
-      }
-    });
-    Experience.instance?.inputSystem.on("right", (args: InputEventArgs) => {
-      if (args.type === "pressed") {
-        this.moveRight = true;
-      } else if (args.type === "released") {
-        this.moveRight = false;
-      }
-    });
-    Experience.instance?.inputSystem.on("jump", (args: InputEventArgs) => {
-      if (args.type === "pressed" && this.canJump) {
-        this.velocity.y = 15;
-      }
-    });
+    if (Experience.instance) {
+      Experience.instance.inputSystem.on("forward", (args: InputEventArgs) => {
+        if (args.type === "pressed") {
+          this.moveForward = true;
+        } else if (args.type === "released") {
+          this.moveForward = false;
+        }
+      });
+      Experience.instance.inputSystem.on("backward", (args: InputEventArgs) => {
+        if (args.type === "pressed") {
+          this.moveBackward = true;
+        } else if (args.type === "released") {
+          this.moveBackward = false;
+        }
+      });
+      Experience.instance.inputSystem.on("left", (args: InputEventArgs) => {
+        if (args.type === "pressed") {
+          this.moveLeft = true;
+        } else if (args.type === "released") {
+          this.moveLeft = false;
+        }
+      });
+      Experience.instance.inputSystem.on("right", (args: InputEventArgs) => {
+        if (args.type === "pressed") {
+          this.moveRight = true;
+        } else if (args.type === "released") {
+          this.moveRight = false;
+        }
+      });
+      Experience.instance.inputSystem.on("jump", (args: InputEventArgs) => {
+        if (args.type === "pressed" && this.canJump) {
+          this.velocity.y = 15;
+        }
+      });
+    } else {
+      throw new Error("Experience instance is not defined");
+    }
   }
 
   // Direction de la caméra sur plan horizontal
