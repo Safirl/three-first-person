@@ -21,6 +21,7 @@ export default class FirstPersonCameraOctree extends Camera {
   declare speed: number;
   declare mass: number;
   declare delta: number;
+  declare maxPitch: number;
 
   constructor(height = 1.7, speed = 40, mass = 50, friction = 10) {
     super();
@@ -44,6 +45,7 @@ export default class FirstPersonCameraOctree extends Camera {
     this.speed = speed;
     this.mass = mass;
     this.friction = friction;
+    this.maxPitch = Math.PI / 2 - 0.01;
 
     this.playerCollider = new Capsule(
       new THREE.Vector3(0, 0.35, 0),
@@ -74,6 +76,11 @@ export default class FirstPersonCameraOctree extends Camera {
       if (document.pointerLockElement === document.body) {
         this.instance.rotation.y -= e.movementX / 500;
         this.instance.rotation.x -= e.movementY / 500;
+        this.instance.rotation.x = THREE.MathUtils.clamp(
+          this.instance.rotation.x,
+          -this.maxPitch,
+          this.maxPitch,
+        );
       }
     });
 
