@@ -9,7 +9,8 @@ export default class NatureWorld extends World {
   declare floor: Floor;
   declare wall: Wall;
 
-  onResourcesLoaded() {
+  init() {
+    super.init();
     this.floor = new Floor();
     this.floor.mesh.position.y = -5;
     this.wall = new Wall();
