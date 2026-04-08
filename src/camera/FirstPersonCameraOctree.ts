@@ -35,17 +35,12 @@ export default class FirstPersonCameraOctree extends Camera {
     // Collision
     this.worldOctree = new Octree();
     this.canJump = false;
-    this.height = 1.7;
-    this.playerCollider = new Capsule(
-      new THREE.Vector3(0, 0.35, 0),
-      new THREE.Vector3(0, this.height, 0),
-      0.35,
-    );
 
     this.velocity = new THREE.Vector3();
     this.direction = new THREE.Vector3();
 
     // Params
+    this.height = 1.7;
     this.speed = 40;
     this.mass = 50;
     this.friction = 10;
@@ -61,6 +56,11 @@ export default class FirstPersonCameraOctree extends Camera {
     );
     this.instance.rotation.order = "YXZ";
     this.instance.position.set(0, 1, 10);
+      this.playerCollider = new Capsule(
+      new THREE.Vector3(0, 0.35, 0),
+      new THREE.Vector3(0, this.height, 0),
+      0.35,
+    );
     super.setInstance();
   }
 
@@ -236,6 +236,8 @@ export default class FirstPersonCameraOctree extends Camera {
       .min(1)
       .max(800)
       .step(0.1);
-    movementsFolder.add(this, "height").name("height").min(1).max(3).step(0.1);
+    movementsFolder.add(this, "height").name("height").min(1).max(5).step(0.1).onChange(() => {
+        this.playerCollider.end.set(0, this.height, 0);
+    });
   }
 }
