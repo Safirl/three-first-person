@@ -12,7 +12,7 @@ import {
   BitControllerProfile,
   keyboardProfile,
 } from "./templates/inputs/inputProfiles";
-import NatureWorld from "./templates/world/NatureWorld";
+import CollisionTemplateWorld from "./templates/world/CollisionTemplateWorld";
 import FirstPersonCameraOctree from "./camera/FirstPersonCameraOctree";
 
 const init = () => {
@@ -28,7 +28,7 @@ const init = () => {
   canvas.style.height = "100%";
 
   // const world = new TemplateWorld();
-  const natureWorld = new NatureWorld();
+  const natureWorld = new CollisionTemplateWorld();
 
   const camera = new FirstPersonCameraOctree();
   const experience = new Experience(
