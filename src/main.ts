@@ -13,6 +13,7 @@ import {
   keyboardProfile,
 } from "./templates/inputs/inputProfiles";
 import NatureWorld from "./templates/world/NatureWorld";
+import FirstPersonCameraOctree from "./camera/FirstPersonCameraOctree";
 
 const init = () => {
   const canvas: HTMLCanvasElement = document.getElementById(
@@ -29,7 +30,7 @@ const init = () => {
   // const world = new TemplateWorld();
   const natureWorld = new NatureWorld();
 
-  const camera = new FirstPersonCamera();
+  const camera = new FirstPersonCameraOctree();
   const experience = new Experience(
     canvas,
     templateSources,

@@ -1,4 +1,5 @@
 import { Environment, Experience, Floor, World } from "base-experience";
+import type FirstPersonCameraOctree from "../../camera/FirstPersonCameraOctree";
 
 export default class NatureWorld extends World {
   declare experience: Experience;
@@ -10,5 +11,10 @@ export default class NatureWorld extends World {
     this.floor = new Floor();
     this.floor.mesh.position.y = -5;
     this.environment = new Environment();
+
+    const camera = Experience.instance?.camera as FirstPersonCameraOctree;
+    if (camera.worldOctree) {
+      camera.worldOctree.fromGraphNode(this.floor.mesh);
+    }
   }
 }
