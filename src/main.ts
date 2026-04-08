@@ -1,6 +1,6 @@
 import './reset.css'
 import './style.css'
-import {Experience, TemplateWorld, type InputEventArgs, type InputProfile } from "base-experience"
+import {Experience, TemplateWorld, type InputProfile } from "base-experience"
 import { templateSources } from 'base-experience'
 import FirstPersonCamera from './camera/FirstPersonCamera'
 import { BitControllerProfile, keyboardProfile } from './inputs/inputProfiles'
