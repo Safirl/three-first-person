@@ -22,7 +22,7 @@ export default class FirstPersonCameraOctree extends Camera {
   declare mass: number;
   declare delta: number;
 
-  constructor() {
+  constructor(height = 1.7, speed = 40, mass = 50, friction = 10) {
     super();
 
     // Mouvements
@@ -40,10 +40,17 @@ export default class FirstPersonCameraOctree extends Camera {
     this.direction = new THREE.Vector3();
 
     // Params
-    this.height = 1.7;
-    this.speed = 40;
-    this.mass = 50;
-    this.friction = 10;
+    this.height = height;
+    this.speed = speed;
+    this.mass = mass;
+    this.friction = friction;
+
+    this.playerCollider = new Capsule(
+      new THREE.Vector3(0, 0.35, 0),
+      new THREE.Vector3(0, this.height, 0),
+      0.35,
+    );
+    this.playerCollider.translate(new THREE.Vector3(0, 0, 5));
   }
 
   // Création de la camra
@@ -55,12 +62,6 @@ export default class FirstPersonCameraOctree extends Camera {
       1000,
     );
     this.instance.rotation.order = "YXZ";
-    this.instance.position.set(0, 1, 10);
-      this.playerCollider = new Capsule(
-      new THREE.Vector3(0, 0.35, 0),
-      new THREE.Vector3(0, this.height, 0),
-      0.35,
-    );
     super.setInstance();
   }
 
