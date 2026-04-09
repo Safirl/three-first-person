@@ -1,5 +1,4 @@
 import { Environment, Experience, Floor, World } from "base-experience";
-import type FirstPersonCameraOctree from "../../camera/FirstPersonCameraOctree";
 import Wall from "../objects/Wall";
 
 
@@ -18,10 +17,9 @@ export default class CollisionTemplateWorld extends World {
     this.wall.mesh.position.y = -5;
     this.environment = new Environment();
 
-    const camera = Experience.instance?.camera as FirstPersonCameraOctree;
-    if (camera.worldOctree) {
-      camera.worldOctree.fromGraphNode(this.floor.mesh);
-      camera.worldOctree.fromGraphNode(this.wall.mesh);
-    }
+    const collisionManager = Experience.instance?.collisionManager
+    if (!collisionManager) throw new Error("CollisionTemplateWorld initialization failed: CollisionManager is not available.");
+    collisionManager?.addCollisionObject([this.floor]);
+    collisionManager?.addCollisionObject([this.wall]);
   }
 }

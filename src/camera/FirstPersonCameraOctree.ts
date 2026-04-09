@@ -10,7 +10,6 @@ export default class FirstPersonCameraOctree extends Camera {
   declare moveRight: boolean;
   declare canJump: boolean;
 
-  declare worldOctree: Octree;
   declare playerCollider: Capsule;
 
   declare velocity: THREE.Vector3;
@@ -34,7 +33,6 @@ export default class FirstPersonCameraOctree extends Camera {
     this.canJump = false;
 
     // Collision
-    this.worldOctree = new Octree();
     this.canJump = false;
 
     this.velocity = new THREE.Vector3();
@@ -157,7 +155,10 @@ export default class FirstPersonCameraOctree extends Camera {
   }
 
   private playerCollisions(): void {
-    const result = this.worldOctree.capsuleIntersect(this.playerCollider);
+    const collisionManager = this.experience.collisionManager;
+    if (!collisionManager) throw new Error("Experience instance is not defined");
+    
+    const result = collisionManager.worldOctree.capsuleIntersect(this.playerCollider);
     this.canJump = false;
 
     if (result) {
