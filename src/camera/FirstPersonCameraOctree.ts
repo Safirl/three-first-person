@@ -66,9 +66,7 @@ export default class FirstPersonCameraOctree extends Camera {
   }
 
   setControls() {
-    Experience.instance?.canvas.addEventListener("mousedown", () => {
-      document.body.requestPointerLock();
-    });
+    Experience.instance?.canvas.addEventListener("mousedown", this.lockPointer);
 
     document.body.addEventListener("mousemove", (e: MouseEvent) => {
       if (document.pointerLockElement === document.body) {
@@ -83,6 +81,10 @@ export default class FirstPersonCameraOctree extends Camera {
     });
 
     this.bindInputs();
+  }
+
+  lockPointer = () => {
+    document.body.requestPointerLock();
   }
 
   bindInputs() {
